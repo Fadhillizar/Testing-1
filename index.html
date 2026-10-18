@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chrome User Activation Monitor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: #1e293b;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        .status-box {
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .inactive {
+            background-color: #7f1d1d;
+            color: #fca5a5;
+        }
+        .active {
+            background-color: #065f46;
+            color: #6ee7b7;
+        }
+        button {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background-color: #2563eb;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>User Activation Status</h2>
+        <p>Memeriksa status interaksi pengguna (klik/sentuhan) pada peramban Chrome.</p>
+        
+        <div id="status" class="status-box inactive">
+            Status: Menunggu Interaksi...
+        </div>
+
+        <button id="actionBtn">Klik Disini untuk Aktivasi</button>
+    </div>
+
+    <script>
+        const statusDiv = document.getElementById('status');
+        const actionBtn = document.getElementById('actionBtn');
+
+        function checkActivation() {
+            if (navigator.userActivation) {
+                // navigator.userActivation.isActive: apakah saat ini sedang dalam state aktif
+                // navigator.userActivation.hasActiveUser: apakah pernah ada interaksi sebelumnya
+                const isActive = navigator.userActivation.isActive;
+                const hasActive = navigator.userActivation.hasActiveUser;
+
+                if (isActive || hasActive) {
+                    statusDiv.className = 'status-box active';
+                    statusDiv.innerHTML = `Status: AKTIF ✅<br><small>isActive: ${isActive} | hasActive: ${hasActive}</small>`;
+                } else {
+                    statusDiv.className = 'status-box inactive';
+                    statusDiv.innerHTML = `Status: BELUM AKTIF ❌`;
+                }
+            } else {
+                statusDiv.innerHTML = `Status: API navigator.userActivation tidak didukung.`;
+            }
+        }
+
+        // Event listener saat tombol diklik (memicu user activation)
+        actionBtn.addEventListener('click', () => {
+            alert('Interaksi terdeteksi! User activation terpenuhi.');
+            checkActivation();
+        });
+
+        // Melakukan pengecekan berkala
+        setInterval(checkActivation, 500);
+    </script>
+
+</body>
+</html>
