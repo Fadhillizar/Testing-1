@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Check User Activation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: #1e293b;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        .status-box {
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .inactive {
+            background-color: #7f1d1d;
+            color: #fca5a5;
+        }
+        .active {
+            background-color: #065f46;
+            color: #6ee7b7;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Auto Validation Check</h2>
+        <p>Sistem mencoba memvalidasi status interaksi browser secara otomatis...</p>
+        
+        <div id="status" class="status-box inactive">
+            Memeriksa...
+        </div>
+    </div>
+
+    <script>
+        const statusDiv = document.getElementById('status');
+
+        function checkAutoActivation() {
+            // Memeriksa status user activation dari browser secara otomatis
+            if (navigator.userActivation && (navigator.userActivation.isActive || navigator.userActivation.hasActiveUser)) {
+                statusDiv.className = 'status-box active';
+                statusDiv.innerHTML = `STATUS: AKTIF / DIIZINKAN ✅`;
+            } else {
+                statusDiv.className = 'status-box inactive';
+                statusDiv.innerHTML = `❌ DIBLOKIR BROWSER:<br><small>Browser mewajibkan minimal 1 interaksi pengguna (klik/sentuhan) pada dokumen.</small>`;
+            }
+        }
+
+        // Langsung jalankan fungsi saat halaman selesai dimuat tanpa menunggu klik
+        window.addEventListener('DOMContentLoaded', () => {
+            checkAutoActivation();
+        });
+    </script>
+
+</body>
+</html>
